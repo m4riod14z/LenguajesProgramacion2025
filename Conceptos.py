@@ -46,8 +46,7 @@ print(f" {num} es par?: {es_par(num)}")
 
 #4. Funciones de orden superior:
 # Son funciones que reciben como parametros otras funciones o devolverlas
-# a. Funcion MAP: Normalizar un conjunto de datos map(funcion, coleccion de datos) genera una nueva lista
-#                 mapeando cada uno de los elementos de la lista
+# a. Funcion MAP: Genera una nueva lista aplicando una funcion definida sobre otra
 
 # b. Funcion FILTER: Genera una nueva lista, aplicando una funcion de filtro booleano (True or False)
 #                     a cada uno de los elementos de la lista original
