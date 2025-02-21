@@ -45,11 +45,15 @@ es_par = lambda x: x % 2 == 0
 print(f" {num} es par?: {es_par(num)}")
 
 #4. Funciones de orden superior:
-# Son funciones que reciben como parametros otras funciones
+# Son funciones que reciben como parametros otras funciones o devolverlas
 # a. Funcion MAP: Normalizar un conjunto de datos map(funcion, coleccion de datos) genera una nueva lista
 #                 mapeando cada uno de los elementos de la lista
-# b. Funcion FILTER:
-# c. Funcion REDUCE:
+
+# b. Funcion FILTER: Genera una nueva lista, aplicando una funcion de filtro booleano (True or False)
+#                     a cada uno de los elementos de la lista original
+
+# c. Funcion REDUCE: Aplica una funcion a cada uno de los elementos de una
+#                     lista, devolviendo un solo valor
 
 #Forma larga:
 #Es una funcion pura?
@@ -78,3 +82,54 @@ print(f"Datos normalizados: {ciudades_norm2}")
 #Ejemplo con la funcion map, usando lambda
 ciudades_norm3 = list(map(lambda n: n.capitalize(), ciudades))
 print(f"Datos normalizados: {ciudades_norm3}")
+
+# Funcion de orden superior definida por el usuario:
+def aplicar_operacion(operacion, operando1, operando2):
+    return aplicar_operacion(operando1, operando2)
+
+print(f"El resultado es: {operacion(val1, val2)}")
+print(f"El resultado es: {aplicar_operacion(operacion, val1, val2)}")
+
+# Uso de la funcion FILTER:
+# Filter aplica una funcion booleana sobre una lista de objetos y devuelve una lista más pequeña
+# que contiene solo los objetos para los cuales la funcion booleana devuelve True.
+
+# edades = [12, 14, 18, 19, 24, 25, 28]
+personas = [{"nombre": "Mario", "edad": "17"},
+            {"nombre": "Maria", "edad": "21"},
+            {"nombre": "Catalina", "edad": "16"},
+            {"nombre": "Manuel", "edad": "34"},]
+
+
+# def filtrar_mayores_edad(edad):
+    # return edad >= 18
+
+def filtrar_personas_mayores(persona):
+    return int(persona["edad"]) >= 18
+
+
+# mayores_edad = list(filter(filtrar_mayores_edad, edades))
+# print(f"Edades mayores a 18: {mayores_edad}")
+
+personas_mayores = list(filter(filtrar_personas_mayores, personas))
+print(f"Personas mayores: {personas_mayores}")
+
+# Funcion REDUCE:
+# Consolida los elementos de una lista usando una funcion que se aplica por cada par de elementos:
+from functools import reduce
+numeros = list(range(1, 101)) #Generar una lista de numeros de 1 a 100
+
+# Sumarlos con un iterador:
+sum = 0
+for i in numeros:
+    sum = sum + i
+
+print(sum)
+
+# Sumar con REDUCE:
+suma = reduce(lambda x,y: x+y, numeros)
+print(suma)
+
+palabras = ["en", "un", "lugar"]
+texto = reduce(lambda a,b: a+" "+b, palabras)
+print(texto)
