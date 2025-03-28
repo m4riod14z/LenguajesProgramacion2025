@@ -36,8 +36,10 @@ reportData = reportGenerator("Estos son los datos del reporte: xdxdxdxd").genera
 reportSaver = ReportSaver()
 reportSaver.saveToFile(reportData, "nuevoReporte.txt")
 
-# O - Open for Extension                      Mantenible, Escalable, Testeable, Configurable
-#     Closed for Modification
+# O - Open for Extension                      
+#     Closed for Modification: Permite añadir funcionas y heredarlas, pero no modificarlas
+
+# Mantenible, Escalable, Testeable, Configurable, Reutilizable, Extensible
 
 # Se usan clases abstractas para no modificar los descuentos
 
@@ -62,7 +64,9 @@ class VipDiscount(Discount):
         this.discount = 0.5
         return super().applyDiscount(price)
     
-# L - Liskov Substitution Principle: Una clase derivada puede sustituir a una clase base sin afectar el comportamiento
+# L - Liskov Substitution Principle: Una clase derivada puede sustituir a una clase base sin afectar el comportamiento del sistema
+# Los subtipos pueden ser usados en reemplazo de sus clases base sin afectar la funcionalidad (Interfaces o Clases abstractas)
+
 class Rectangle:
 
     def __init__(self, width, height):
@@ -81,7 +85,7 @@ class Rectangle:
 
 class Square(Rectangle):
 
-    # Viola el principio LSP:
+    # Vulnera el principio LSP: Ya que no se puede usar un cuadrado como un rectangulo
     def set_width(self, width):
         self.height = width
         self.widht = width
@@ -96,6 +100,7 @@ class Square(Rectangle):
 class Shape(ABC):
 
     @abstractmethod
+    # La implementacion se le deja a las subclases
     def area(self):
         pass
 
@@ -122,4 +127,135 @@ class Square(Shape):
     def area(this):
         return this.side**2
     
-# ¿Por qué respeta el principio LSP?
+# ¿Por qué respeta el principio LSP?: Ambos heredan la misma forma (shape) 
+
+# I - Interface Segregation Principle (ISP): Clientes no deben depender de metodos que no usan, segregar es separar en interfaces solo los metodos que se van a usar
+# Está relacionado con el principio S
+# Tipos de impresion
+
+class Printer(ABC):
+
+    @abstractmethod
+    def print(this, document):
+        pass
+
+    @abstractmethod
+    def fax(this, document):
+        pass
+
+    @abstractmethod
+    def scan(this, document):
+        pass
+
+# Impresora moderna
+class HQPrinter(Printer):
+    
+    def print(this, document):
+        return super().print(document)
+    
+    def scan(this, document):
+        return super().scan(document)
+    
+    def fax(this, document): # Vulnera el principio ISP
+        raise NotImplementedError("Las impresoras modernas no envian fax")
+
+# Impresora antigua, de baja calidad
+class LQPrinter(Printer):
+    
+    def print(this, document):
+        return super().print(document)
+    
+    def scan(this, document):
+        return super().scan(document)
+    
+    def fax(this, document):
+        return super().fax(document)
+
+# Solucion
+# Primero se deja la clase impresora tal y como está y se separa la funcion fax en otra interfaz
+# Segrego las funcionalidades en dos interfaces o clases separadas
+
+class Printer(ABC):
+
+    @abstractmethod
+    def print(this, document):
+        pass
+
+    @abstractmethod
+    def scan(this, document):
+        pass
+
+class Fax(ABC):
+
+    @abstractmethod
+    def Fax(this, document):
+        pass
+
+class HQPrinter(Printer):
+    
+    def print(this, document):
+        return super().print(document)
+    
+    def scan(this, document):
+        return super().scan(document)
+    
+class LQPrinter(Printer, Fax):
+    
+    def print(this, document):
+        return super().print(document)
+    
+    def scan(this, document):
+        return super().scan(document)
+    
+    def Fax(this, document):
+        return super().Fax(document)
+
+
+# D - Dependency Inversion Principle (DIP): Las abstracciones no deben depender de los detalles
+#                                           Los detalles dependen de las abstracciones
+
+class FrontEnd:
+
+    def __init__(this, back_end):
+        this.back_end = back_end
+
+    def show_data(this):
+        data = this.back_end.getData()
+        print(f"Mostrando info en el front end: {data}")
+
+class BackEnd:
+
+    def getData():
+        return "Esta info viene de la base de datos..."
+    
+# Correción: Se separa el back end para segregar funcionalidades:
+
+class FrontEnd:
+
+    def __init__(this, dataSource):
+        this.dataSource = dataSource
+
+    def show_data(this):
+        data = this.dataSource.getData()
+        print(f"Mostrando info en el front end: {data}")
+
+class DataSource(ABC):
+
+    @abstractmethod
+    def getData(this):
+        pass
+
+class SQLDataBase(DataSource):
+
+    def getData(this):
+        return "Datos de una base de datos relacional"
+    
+class DocumentDataBase(DataSource):
+
+    def getData(this):
+        return "Datos de una base de datos documental"
+    
+class API(DataSource):
+
+    def getData(this):
+        return "Datos que vienen de una API"
