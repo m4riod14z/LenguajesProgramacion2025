@@ -160,7 +160,7 @@ class TemperatureAdapter(FahrenheitTemperatureSensor):
     # Funcion que adapta desde la clase no compatible para que el cliente la pueda consumir
     def getTempFahr(this):
         # Codigo que adapta desde la clase no compatible
-        celsius = this.sensor.get
+        celsius = this.sensor.getTempCelsius()
         return celsius * (9/5) + 32
     
 # Ejemplo de uso de la clase adaptadora
