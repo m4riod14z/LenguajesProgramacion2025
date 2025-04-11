@@ -136,43 +136,174 @@ from abc import ABC, abstractmethod
 # 3. Adapter: Es un patron que permite adaptar la comunicacion entre objetos que tienen interfaces distintas
 # Ejemplo
 
-# Clase incompatible que necesitamos adaptar:
-class CelsiusTemperatureSensor:
+# # Clase incompatible que necesitamos adaptar:
+# class CelsiusTemperatureSensor:
 
-    def __init__(this, temp):
-        this.temp = temp
+#     def __init__(this, temp):
+#         this.temp = temp
 
-    def getTempCelsius(this):
-        return this.temp
+#     def getTempCelsius(this):
+#         return this.temp
 
-class FahrenheitTemperatureSensor:
-    def getTempFahr(this):
+# class FahrenheitTemperatureSensor:
+#     def getTempFahr(this):
+#         pass
+
+# # Clase adaptador entre las dos clases
+# # Se recibe como parametro la clase a la cual se va a adaptar la informacion de la clase incompatible
+# class TemperatureAdapter(FahrenheitTemperatureSensor):
+
+#     # Se inicializa con la clase incompatible
+#     def __init__(this, sensor):
+#         this.sensor = sensor
+
+#     # Funcion que adapta desde la clase no compatible para que el cliente la pueda consumir
+#     def getTempFahr(this):
+#         # Codigo que adapta desde la clase no compatible
+#         celsius = this.sensor.getTempCelsius()
+#         return celsius * (9/5) + 32
+    
+# # Ejemplo de uso de la clase adaptadora
+# sensor = CelsiusTemperatureSensor(23)
+# adaptador = TemperatureAdapter(sensor)
+# print(f"La temperatura convertida es {adaptador.getTempFahr()}°F")
+
+
+# 4. Decorator: Apunta al principio O, permite añadirle o modificar funcionalidades nuevas a un objeto de forma dinámica sin modificar estructuras básicas
+# class Text:
+
+#     def __init__(this, text):
+#         this.text = text
+
+#     def render(this) -> str:
+#         return this.text
+    
+# # Decorador base:
+# class BaseDecorator:
+
+#     def __init__(this, component):
+#         this._component = component # Raya al piso _ para indicar que es un atributo de instancia
+
+#     def render(this):
+#         return this._component.render()
+    
+# # Decoradores concretos:
+# class BoldDecorator(BaseDecorator):
+    
+#     def render(this):
+#         return f"<b>{super().render()}</b>"
+
+# class ItalicDecorator(BaseDecorator):
+    
+#     def render(this):
+#         return f"<i>{super().render()}</i>"
+
+# class UnderlineDecorator(BaseDecorator):
+    
+#     def render(this):
+#         return f"<u>{super().render()}</u>"
+    
+# # Uso:
+# texto = Text("Lenguajes de programación 2025A")
+# decorado = UnderlineDecorator(BoldDecorator(ItalicDecorator(texto)))
+# print(decorado.render())
+
+# # Behavioral Patterns: Como se comportan entre ellos y en el sistema, identifica patrones de comunicacion entre objetos
+# # 5. Strategy: Encapsular distintos comportamientos reusable en distintos contextos
+
+# # Estrategia base:
+# class PaymentStrategy():
+#     def pay(this, value):
+#         pass
+
+# # Estrategias concretas:
+# class CreditCard(PaymentStrategy):
+#     def pay(this, value):
+#         print(f"Payment mande by credit card. Amount: {value}")
+
+# class Paypal(PaymentStrategy):
+#     def pay(this, value):
+#         print(f"Payment made by Paypal. Amount: {value}")
+
+# class CryptoCurrenct(PaymentStrategy):
+#     def pay(this, value):
+#         print(f"Payment made by Crypto Currency. Amount: {value}")
+
+# # Contexto uso:
+# class OnlineStore:
+
+#     def __init__(this, strategy: PaymentStrategy):
+#         this._strategy = strategy
+
+#     def checkout(this, value):
+#         this._strategy.pay(value)
+
+# # Uso:
+# OnlineStore_Session = OnlineStore(CreditCard)
+# OnlineStore_Session.checkout(150)
+
+# OnlineStore_Session._strategy = Paypal
+# OnlineStore_Session.checkout(230)
+
+# Diferencia entre Strategy y Decorator:
+# Strategy: Permite elegir una forma de solucionar un problema (Elige un algoritmo)
+# Decorator: Añade funcionalidades a un objeto existente sin modificarlo
+
+
+# 6. Command: Encapsula una petición de una función como un objeto, permitiendo parametrizar las solicitudes de acuerdo a los clientes y manejar peticiones como objetos (historia, cola de peticiones, etc):
+
+# Implementación de un control remoto para prender y apagar una luz:
+# Receptor del comando:
+class Light:
+
+    def on(this):
+        print("Light is on")
+
+    def off(this):
+        print("Light is off")
+
+# Comando base:
+class Command:
+    
+    def exec_command(this):
         pass
 
-# Clase adaptador entre las dos clases
-# Se recibe como parametro la clase a la cual se va a adaptar la informacion de la clase incompatible
-class TemperatureAdapter(FahrenheitTemperatureSensor):
+# Comandos concretos:
+class TurnLightOn(Command):
+    # Cada comando concreto se instancia determinando también que objeto recibe el comando y la operación a ejecutar
+    def __init__(this, light: Light):
+        this._light = light
 
-    # Se inicializa con la clase incompatible
-    def __init__(this, sensor):
-        this.sensor = sensor
+    def exec_command(this):
+        this._light.on()
 
-    # Funcion que adapta desde la clase no compatible para que el cliente la pueda consumir
-    def getTempFahr(this):
-        # Codigo que adapta desde la clase no compatible
-        celsius = this.sensor.getTempCelsius()
-        return celsius * (9/5) + 32
+class TurnLightOff(Command):
+    def __init__(this, light: Light):
+        this._light = light
+
+    def exec_command(this):
+        this._light.off()
+
+# Invocador:
+class LightRemoteControl:
     
-# Ejemplo de uso de la clase adaptadora
-sensor = CelsiusTemperatureSensor(23)
-adaptador = TemperatureAdapter(sensor)
-print(f"La temperatura convertida es {adaptador.getTempFahr()}°F")
+    def __init__(this):
+        this._command = None
 
+    def setCommand(this, command: Command):
+        this._command = command
 
-# 4. Decorator
+    def pushButton(this):
+        this._command.exec_command()
 
+# Uso:
+bedroomLight = Light() # Receptor del comando
+turnOn = TurnLightOn(bedroomLight) # Comando para prender la luz
+turnOff = TurnLightOff(bedroomLight) # Comando para apagar la luz
 
-# Behavioral Patterns: Como se comportan entre ellos y en el sistema, identifica patrones de comunicacion entre objetos
-# 5. Strategy
+remoteControl = LightRemoteControl()
+remoteControl.setCommand(turnOn)
+remoteControl.pushButton()
 
-# 6. Command
+remoteControl.setCommand(turnOff)
+remoteControl.pushButton()
