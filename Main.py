@@ -1,8 +1,17 @@
-from Modulo1 import*
+from Model import TaskModel
+from Controller import TaskController
+from View import TaskView
 
-nombre_archivo = input("ingrese nombre de el archivo: ")
+if __name__ == "__main__":
+    model = TaskModel()
+    view = TaskView()
+    controller = TaskController(model=model, view=view)
+    controller.runController()
 
-lista_datos = cargarDatos(nombre_archivo)
+# Modificar para que se tengan 3 tipos de tareas (Usando patrones de diseño)
+# Tareas: Prioridad baja, prioridad media, prioridad alta
 
-for linea in  lista_datos:
- print ("\n" + linea)
+# Mostrar tareas con alta prioridad
+# Mostrar tareas con baja prioridad
+
+# Sugerir una mejora a la lista de tareas con un patron de diseño
