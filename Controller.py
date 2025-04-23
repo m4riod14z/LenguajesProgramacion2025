@@ -3,28 +3,63 @@
 
 from Model import TaskModel
 from View import TaskView
+from TaskFactory import LowPriorityFactory, MediumPriorityFactory, HighPriorityFactory
 
 class TaskController:
 
     def __init__(this, model: TaskModel, view: TaskView):
-        this.model = model
-        this.view = view
+        this._model = model
+        this._view = view
 
     def addTask(this):
-        # Captura información de la vista:
-        newTask = this._view.promptForAdd()
-        # Actualiza el modelo con lo que la vista devuelve:
-        this._model.addTask(newTask)
-        this._view.showMessage("La tarea ha sido agregada")
+        description, priority = this._view.promptForAdd()
+        factory = this._getFactory(priority)
+        if factory:
+            task = factory.create_task(description)
+            this._model.addTask(task)
+            this._view.showMessage("La tarea ha sido agregada")
+        else:
+            this._view.showMessage("Prioridad no válida")
 
-    # Completar:
     def removeTask(this):
-        pass
+        index = this._view.promptForRemove() - 1
+        removed = this._model.remove(index)
+        if removed:
+            this._view.showMessage(f"Tarea '{removed}' eliminada")
+        else:
+            this._view.showMessage("Índice inválido")
 
-    # Completar:
     def showTasks(this):
-        pass
+        tasks = this._model.listTasks()
+        this._view.showAllTasks(tasks)
 
-    # Menú del controlador:
+    def showTasksByPriority(this, priority):
+        tasks = this._model.listTasksByPriority(priority)
+        this._view.showAllTasks(tasks)
+
     def runController(this):
-        pass
+        while True:
+            option = this._view.menu()
+            if option == 1:
+                this.addTask()
+            elif option == 2:
+                this.removeTask()
+            elif option == 3:
+                this.showTasks()
+            elif option == 4:
+                priority = this._view.promptForPriority()
+                this.showTasksByPriority(priority)
+            elif option == 5:
+                break
+            else:
+                this._view.showMessage("Opción inválida")
+
+    def _getFactory(this, priority):
+        if priority == "baja":
+            return LowPriorityFactory()
+        elif priority == "media":
+            return MediumPriorityFactory()
+        elif priority == "alta":
+            return HighPriorityFactory()
+        else:
+            return None

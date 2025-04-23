@@ -20,3 +20,6 @@ class TaskModel:
     
     def listTasks(this):
         return this._tasks
+    
+    def listTasksByPriority(this, priority):
+        return [t for t in this._tasks if f"[{priority.capitalize()}]" in str(t)]

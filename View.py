@@ -11,10 +11,23 @@ class TaskView:
                 print(f"Tarea {i+1} - {t}")
 
     def promptForAdd(this):
-        return input("Ingrese una nueva tarea:")
+        description = input("Ingrese una nueva tarea:")
+        priority = input("Ingrese la prioridad (baja, media, alta): ").lower()
+        return description, priority
 
     def promptForRemove(this):
         return int(input("Ingrese el indice de la tarea a eliminar"))
     
-    def showMessage(msg):
+    def promptForPriority(this):
+        return input("¿Qué prioridad desea mostrar? (baja, media, alta): ").lower()
+    
+    def menu(this):
+        print("\n1. Agregar tarea")
+        print("2. Eliminar tarea")
+        print("3. Mostrar todas las tareas")
+        print("4. Mostrar tareas por prioridad")
+        print("5. Salir")
+        return int(input("Seleccione una opción: "))
+
+    def showMessage(this, msg):
         print(msg)
