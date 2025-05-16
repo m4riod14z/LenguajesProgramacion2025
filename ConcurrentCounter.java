@@ -25,22 +25,37 @@ public class ConcurrentCounter {
 		// c) Livelocks: Tipo de bloqueo pero un poco menos drastico
 		// d) Startuation
 		
+		// Los metodos sincronizados dan turnos a los hilos
+		
+		// Si el codigo que accede al recurso compartido solo es una parte pero no una instruccion solo se sincroniza esa parte de codigo
+		
+		// Formas similares pueden ser los candados
+		
+		// Variables atomicas (Nueva palabra reservada volatil): Restringe acceso a variables
+		
+		// Transaccioes: Bloque de operaciones
+		
+		// Atomicidad
+		// Cconsistencia
+		// Isolation
+		// Durabilidad
+		
 		Counter myCounter = new Counter();
 		Thread hilo1 = new Thread( () -> { // Metodo para crear hilos
 			
 			// Este hilo va a llamar la funcion incrementar de Counter, 10 veces:
 			for(int i=0; i<10; i++)
 			{
-				myCounter.increment();
-				System.out.println("Hilo actual: "+Thread.currentThread().getId()+"Valor del contador: "+myCounter.getValue());
+				myCounter.increment1();
+				System.out.println("Hilo actual: "+Thread.currentThread().getId()+" Valor del contador: "+myCounter.getValue1());
 			}
 		} );
 		
 		Thread hilo2 = new Thread( () -> {
 			for(int i=0; i<10; i++)
 			{
-				myCounter.decrement();
-				System.out.println("Hilo actual: "+Thread.currentThread().getId()+" Valor del contador: "+myCounter.getValue());
+				myCounter.decrement1();
+				System.out.println("Hilo actual: "+Thread.currentThread().getId()+" Valor del contador: "+myCounter.getValue1());
 			}
 		} );
 		
@@ -59,6 +74,6 @@ public class ConcurrentCounter {
 		}
 		
 		// Imprimir valor final del contador:
-		System.out.println("\nValor final del contador:"+myCounter.getValue());
+		System.out.println("\nValor final del contador: "+myCounter.getValue1());
 	}
 }
